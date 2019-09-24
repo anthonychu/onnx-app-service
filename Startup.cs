@@ -23,7 +23,7 @@ namespace OnnxAppService
         {
             app.UseDeveloperExceptionPage();
 
-            app.Run(async (context) =>
+            app.Run(context =>
             {
                 var inputImagePath = Path.Combine(env.ContentRootPath, "drill.jpg");
                 var data = ConvertImageToTensor(inputImagePath);
@@ -36,7 +36,7 @@ namespace OnnxAppService
                         .First(i => i.Name == "classLabel")
                         .AsEnumerable<string>()
                         .First();
-                    await context.Response.WriteAsync(prediction);
+                    return context.Response.WriteAsync(prediction);
                 }
             });
         }
