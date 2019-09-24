@@ -23,12 +23,13 @@ namespace OnnxAppService
         {
             app.UseDeveloperExceptionPage();
 
+            var onnxPath = Path.Combine(env.ContentRootPath, "products.onnx");
+            var session = new InferenceSession(onnxPath);
+            
             app.Run(context =>
             {
                 var inputImagePath = Path.Combine(env.ContentRootPath, "drill.jpg");
                 var data = ConvertImageToTensor(inputImagePath);
-                var onnxPath = Path.Combine(env.ContentRootPath, "products.onnx");
-                var session = new InferenceSession(onnxPath);
                 var input = NamedOnnxValue.CreateFromTensor<float>("data", data);
                 using (var output = session.Run(new[] { input }))
                 {
